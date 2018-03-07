@@ -1,12 +1,8 @@
 ## 轮播图插件
 
- * *@param img: 数组，包含图片对象信息,例:[
+ * *@param img: 包含图片地址和超链地址信息的对象的数组,例:
 
-      ​					{url: "a.jpg", href: "***.com"},
-
-      ​					{url: "b.jpg", href: "***.com"},
-       					{url: "d.jpg", href: "***.com"}
-       				]
+      ​				[ {url: "a.jpg", href:".com"}, {url: "b.jpg", href:".com"}, {url: "d.jpg", href:".com"}]
 
  * *@param width: 设置容器/图片宽度
 
