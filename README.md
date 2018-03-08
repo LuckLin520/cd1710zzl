@@ -1,4 +1,4 @@
-## 轮播图插件
+## jquery.linCarousel轮播图插件
 
  * *@param img: 包含图片地址和超链地址信息的对象的数组,例:
 
@@ -15,3 +15,4 @@
 
  * *Date: 2018-03-5 Completed in Chengdu.
     ​
+    ## plane fight面向对象飞机大战

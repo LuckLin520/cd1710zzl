@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input id="btn" type="button" value="start game">
+<script src="js/tool.js"></script>
+<script src="js/Map.js"></script>
+<script src="js/Role.js"></script>
+<script src="js/Fighter.js"></script>
+<script src="js/Bullet.js"></script>
+<script src="js/Enemy.js"></script>
+<script src="js/Game.js"></script>
+<script type="text/javascript">
+	$("#btn").onclick = function(){
+		Game.startGame();
+		this.style.display = "none";
+	}
+</script>
+</body>
+</html>
