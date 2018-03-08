@@ -14,5 +14,8 @@
  * *Copyright 2018 LuckLin520
 
  * *Date: 2018-03-5 Completed in Chengdu.
+   
+  
     ​
-    ## plane fight面向对象飞机大战
+## plane fight面向对象飞机大战
+	其中用了自己在学习过程中封装的各种函数tool.js
