@@ -68,7 +68,7 @@
 			this.imgbox.children("li").find("a img").css({width: this.width, height: this.height});
 			this.dotbox.css({position: "absolute",
 							 width: (12 + 6) * this.len,
-							 left: "40%",
+							 left: "calc(50% - " + (12 + 6) * this.len / 2 + "px)",
 							 bottom: "15px"
 							}).children("li").css({
 							 	width: "12px",
