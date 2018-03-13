@@ -61,23 +61,25 @@ function inArray(value,array) {
  * @param toDate 日期时间对象
  * @return 返回当前日期距传入日期的 [天，时，分，秒，毫秒] 组成的长度为5的array
  */
+function MSchange(ms){//毫秒转换日、时、分、秒、毫秒
+	var day = Math.floor(ms / (24 * 60 * 60 * 1000));
+	var houer = ("0" + Math.floor(ms % (24 * 60 * 60 * 1000) / (60 * 60 *1000))).slice(-2);
+	var minute = ("0" + Math.floor(ms % (24 * 60 * 60 * 1000) % (60 * 60 *1000) / (60 * 1000))).slice(-2);
+	var second = ("0" + Math.floor(ms % (24 * 60 * 60 * 1000) % (60 * 60 *1000) % (60 * 1000) / 1000)).slice(-2);
+	var millisecond = ("00" + ms % (24 * 60 * 60 * 1000) % (60 * 60 *1000) % (60 * 1000) % 1000).slice(-3);
+	return [day,houer,minute,second,millisecond];
+};
 function countDown(toDate){
 	var toTime = Date.parse(toDate);
 	var now = new Date();
 	var short = toTime - now.getTime();
-	var day = Math.floor(short / (24 * 60 * 60 * 1000));
-	var houer = ("0" + Math.floor(short % (24 * 60 * 60 * 1000) / (60 * 60 *1000))).slice(-2);
-	var minute = ("0" + Math.floor(short % (24 * 60 * 60 * 1000) % (60 * 60 *1000) / (60 * 1000))).slice(-2);
-	var second = ("0" + Math.floor(short % (24 * 60 * 60 * 1000) % (60 * 60 *1000) % (60 * 1000) / 1000)).slice(-2);
-	var millisecond = ("00" + short % (24 * 60 * 60 * 1000) % (60 * 60 *1000) % (60 * 1000) % 1000).slice(-3);
-	var arr = [day,houer,minute,second,millisecond];
-	return arr;
-}
+	return MSchange(short);
+};
 
 /**44444
  * 根据id、类名或标签名查找元素
  * @param selector 选择器(字符串)，如： #id / .className / tag
- * @param context 查找上下文DOM对象，可选，默认使用 document
+ * @param [context] 查找上下文DOM对象，可选，默认使用 document
  * @return 返回查找到的DOM元素或 HTMLCollection
  */
  function $(selector,context){
@@ -92,7 +94,7 @@ function countDown(toDate){
 /**55555
  * 解决document.getElementsByClassName()的IE8兼容问题
  * @param className 传入某元素的指定某个class名
- * @param context 查找上下文DOM对象，可选，默认使用 document
+ * @param [context] 查找上下文DOM对象，可选，默认使用 document
  * @return 返回查找到的符合条件的 HTMLCollection
  */
 function getElementsByClassName(className,context){
@@ -153,7 +155,6 @@ function getElementsByClassName(className,context){
 	 		return window.getComputedStyle ? getComputedStyle(obj)[attr] : obj.currentStyle[attr];
 	 	obj.style[attr] = value;
  	}
- 	
  }	
 
 /**88888
@@ -291,7 +292,7 @@ function delegate(parentElement, childSelector, type, callback) {
 /**15a15a15a
  * css运动函数
  * element -- 运动元素
- * options -- 运动属性目标值(对象)
+ * options -- 运动属性目标值(对象) (如果过度颜色和定位，在css中必须初始一个值)
  * [duration] -- 运动持续时间(可选，默认"normal"1000ms，"fast"快速的、"slow"慢速度)
  * [easing] -- 运动曲线(可选，"linear"、"easeout",可参照Tween算法公式增改)
  * [callback] -- 回调函数(可选)
@@ -309,7 +310,7 @@ function animate(element, options, duration, easing, callback){
 		duration = defaultDuration[duration] ? defaultDuration[duration] : 1000;
 	var begin = {}, range = {};
 	for(var attr in options){
-		if(attr === "color" || attr === "backgroundColor" || attr === "background-color"){
+		if(/color/i.test(attr)){
 			begin[attr] = {}, range[attr] = {};
 			var beginArr = transitColor(css(element,attr));
 			var valueArr = transitColor(options[attr]);
@@ -332,7 +333,7 @@ function animate(element, options, duration, easing, callback){
 				callback = easing;
 				easing = "linear";
 			}
-			if(attr === "color" || attr === "backgroundColor" || attr === "background-color"){
+			if(/color/i.test(attr)){
 				var r0 = Number(t * range[attr]["r0"] / duration) + Number(begin[attr]["r0"]);
 				var r1 = Number(t * range[attr]["r1"] / duration) + Number(begin[attr]["r1"]);
 				var r2 = Number(t * range[attr]["r2"] / duration) + Number(begin[attr]["r2"]);
@@ -345,8 +346,7 @@ function animate(element, options, duration, easing, callback){
 					// -c *(t/=d)*(t-2) + bt
 					result = -range[attr] * (t /= duration) * (t - 2) + begin[attr];
 			}
-			var isUnit = attr === "opacity" || attr === "color" || attr === "backgroundColor" || attr === "background-color" ? "" : "px";
-			css(element, attr, result + isUnit);
+			css(element, attr, result + (attr === "opacity" || /color/i.test(attr) ? "" : "px"));
 		}
 		if (elapsed === duration){
 			clearInterval(element.timer);
@@ -402,13 +402,22 @@ function fadeOut(element, duration, callback){
 }
 
 /**17a17a17a
- * 获取颜色值，随机数
+ * 获取随机颜色值，随机数
  * randomNum(m, b) -- 获取 m~b 随机整数(可取m,b)
  * randomRgb() -- 获取随机 rgb 颜色值
  */
 randomNum=(m, b) => Math.floor(Math.random() * (b - m + 1)+ m); 
-randomRgb=() => "rgb("+this.randomNum(0, 255)+","+this.randomNum(0, 255)+","+this.randomNum(0, 255)+")"; 
-
+randomRgb=() => "rgb("+randomNum(0, 255)+","+randomNum(0, 255)+","+randomNum(0, 255)+")"; 
+function randomHex(){
+	var hex = "#";
+	for(var i = 0; i < 6; i ++){
+		var re_09 = randomNum(0, 9),
+			re_af = String.fromCharCode(randomNum(97, 102));
+		var arr = [re_09, re_af];
+		hex += arr[randomNum(0, 1)];
+	}
+	return hex;
+}
 
 /**18a18a18a
  * 抛物线定位运动(相对文档流)
@@ -483,7 +492,8 @@ function waterfall(container){
 		imgboxs[i].style.left = spacing * (currColIndex + 1) + currColIndex * colWidth +"px";
 		imgboxs[i].style.top = height[currColIndex] + 10 +"px";
 		height[currColIndex] += imgboxs[i].offsetHeight + 10;
-	}	
+	}
+	container.style.height = Math.max.apply(null, height) + 10 + "px";	
 
 }
 
@@ -539,7 +549,6 @@ function waterfall(container){
 				// 判断是否预期返回JSON数据
 				if (options.dataType === "json")
 					data = JSON.parse(data);
-
 				// 如果有成功执行的函数，则调用
 				options.success && options.success(data);
 			} else { // 请求失败
