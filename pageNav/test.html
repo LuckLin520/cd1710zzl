@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pageNav_demo</title>
+        <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+        <link rel="stylesheet" type="text/css" href="pageNav.css">
+       <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+       <script src="pageNav.js"></script>
+
+<body style="padding-left: 20px;">
+<header>
+    <h2>PageNav</h2>
+    <h4>Usage</h4>
+</header>
+<p>
+    一:<br />
+    pageNav.css <br />
+    jquery <br />
+    pageNav.js <br />
+    将上述3个文件依次引入<br />
+    二:<br />
+    复制nav的html至你的页面中，并给与id，这个将作为生成分页条的盒子。
+    根据需要可以在Nav中添加/删除 dark 类名来搭配浅色/深色背景。<br />
+    <code>&lt;nav aria-label="Page navigation" class="page-nav-outer" id="PageNavId"&gt;&lt;/nav&gt;</code><br />
+    三:<br />
+    生成翻页导航:<br />
+    <code>
+        var pageNavObj = null;//用于储存分页对象<br />
+        pageNavObj = new PageNavCreate("PageNavId",{
+            pageCount:30,
+            currentPage:1,
+            perPageNum:5,
+        });<br />
+        pageNavObj.afterClick(pageNavCallBack);<br />
+        /*<br />
+            PageNavId://盒子的id名<br />
+            pageCount://总页数<br />
+            currentPage://当前页<br />
+            perPageNum://每页按钮数(非必须,默认5)<br />
+            pageNavObj.afterClick()<br />
+            在这个方法内传入你的回调函数，这个回调函数会在翻页按钮被点击后执行，回调函数的参数中将会传入当前点击的页码值，pageNavCallBack函数的名称和内容根据需要自定;<br />
+            一般在回调函数中执行AJAX异步请求，然后根据返回的数据，重复步骤三重新生成一个分页条。<br />
+        */<br />
+    </code>
+</p>
+
+<nav aria-label="Page navigation" class="page-nav-outer" id="PageNavId"></nav>
+
+<script type="text/javascript">
+    var pageNavObj = null;//用于储存分页对象
+    pageNavObj = new PageNavCreate("PageNavId",{
+         pageCount:30, 
+         currentPage:1, 
+         perPageNum:5, 
+    });
+    pageNavObj.afterClick(pageNavCallBack);
+
+    function pageNavCallBack(clickPage){
+        pageNavObj = new PageNavCreate("PageNavId",{
+             pageCount:30, 
+             currentPage:clickPage, 
+             perPageNum:5, 
+        });
+        pageNavObj.afterClick(pageNavCallBack);
+    }
+</script>
+</body>
+</html>

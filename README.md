@@ -19,3 +19,5 @@
     ​
 ## plane fight面向对象飞机大战
 	其中用了自己在学习过程中封装的各种函数tool.js
+
+## pageNav分页导航插件（基于jquery、bootstrap）
