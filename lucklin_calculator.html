@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>lucklin calculator</title>
+	<style type="text/css">
+	*{margin: 0;padding: 0;box-sizing: border-box;}
+	body{font-family: "Courier New"}
+	@media screen and (min-width: 1400px) {
+	    .wrapper{
+			width: 640px;
+			background: grey;
+		}
+	}
+	@media screen and (min-width: 1400px) {
+	    .icon-box{
+			width: 640px;
+		}
+	}
+	@media screen and (max-width: 1400px) {
+	    .icon-box{
+			width: 100vw;
+		}
+	}
+	@media screen and (min-width: 1400px) {
+	    .history-info{
+			width: 640px;
+			left: calc(50% - 320px);
+		}
+	}
+	@media screen and (max-width: 1400px) {
+	    .history-info{
+			width: 100vw;
+		}
+	}
+	.wrapper{
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		background: url('http://hao8090.com/images/04fen.gif');
+		padding: 3px;
+		box-shadow: inset 0px 0px 10px rgba(0,0,0,.5);
+		overflow: hidden;
+		position: relative;
+	}
+	.lcd-box{
+		flex: 1;
+		overflow: auto;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+	.key-box{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.key{
+		height: 10vh;
+		background: -webkit-linear-gradient(bottom, transparent , RGB(255,255,255,.5), transparent);
+		background: -o-linear-gradient(bottom, transparent, RGB(255,255,255,.5), transparent); 
+		background: -moz-linear-gradient(bottom, transparent, RGB(255,255,255,.5), transparent);
+		background: linear-gradient(to bottom, transparent , RGB(255,255,255,.5), transparent);
+		width: calc(25% - 2px);
+		margin-top: 0.2vh;
+		margin-right: 2px;
+		border: 1px solid pink;
+		border-radius: 5px;
+		text-align: center;
+
+		moz-user-select: -moz-none; 
+		-moz-user-select: none; 
+		-o-user-select:none; 
+		-khtml-user-select:none; 
+		-webkit-user-select:none; 
+		-ms-user-select:none; 
+		user-select:none;
+	}
+	.key-num{
+		background: -webkit-linear-gradient(bottom, transparent , RGB(252,232,206,.8), transparent);
+		background: -o-linear-gradient(bottom, transparent, RGB(252,232,206,.8), transparent);
+		background: -moz-linear-gradient(bottom, transparent, RGB(252,232,206,.8), transparent);
+		background: linear-gradient(to bottom, transparent , RGB(252,232,206,.8), transparent);
+	}
+	.key:nth-child(4n), .key:last-child{
+		margin-right: 0;;
+	}
+	.zero{
+		flex: 2
+	}
+	.key span{
+		font-size: 4.5vh;
+		font-weight: bold;
+		line-height: 10vh;
+		background: url('http://hao8090.com/images/04fen.gif');
+		color: RGB(158,128,255);
+		-webkit-background-clip: text;
+        -moz-background-clip: text;
+        -khtml-background-clip: text;
+        -ms-background-clip: text;
+        -o-background-clip: text;
+        background-clip: text;
+        /*-webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        -khtml-text-fill-color: transparent;
+        -ms-text-fill-color: transparent;
+        -o-text-fill-color: transparent;
+        text-fill-color: transparent;*/
+	}
+	.active{
+		background:RGB(211,116,144);
+		background: -webkit-linear-gradient(bottom, transparent , RGB(0,0,0,.2), transparent);
+		background: -o-linear-gradient(bottom, transparent, RGB(0,0,0,.2), transparent);
+		background: -moz-linear-gradient(bottom, transparent, RGB(0,0,0,.2), transparent); 
+		background: linear-gradient(to bottom, transparent , RGB(0,0,0,.2), transparent);
+	}
+
+	.icon-box{
+		display: flex;
+		justify-content: space-between;
+		padding: 2vw;
+		color: RGB(252,232,206,.5);
+		position: fixed;
+		padding-right: 3vw;
+	}
+	.history-info{
+		position: absolute;
+		height: 50vh;
+		background: RGB(254,237,190);
+		z-index: 100;
+		display: none;
+		text-align:right;
+		padding: 2vh;
+	}
+	.history-info .history-item{
+		padding: .3vh 0;
+	}
+	.history-info .history-item .pro{
+		font-size: 3.2vh;
+		color: RGB(1,152,207);
+		line-height: 3vh;
+	}
+	.history-info .history-item .re{
+		font-size: 2.5vh;
+		color: RGB(255,127,39);
+		line-height: 3vh;
+	}
+	.about-info{
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		z-index: 100;
+		text-align:center;
+		display: none;
+	}
+	.about-info>div{
+		display: inline-block;
+		text-align: left;
+		margin-top: 25vh;
+	}
+	.about-info>h3{
+		margin-top: 10vh;
+	}
+	.input-box{
+		flex: 1;
+		text-align: right;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+	.program{
+		color: RGB(155,0,202);
+		font-size: 6vh;
+		font-weight: bold;
+	}
+	.result{
+		color: RGB(248,91,1);
+		font-size: 4vh;
+		font-weight: 600;
+	}
+	
+	.wrapper .hidebox{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0,0,0,.4);
+		display: none;
+	}
+.icon-about{
+	font-weight: bold;
+	font-size: 3.2vh!important;
+}
+.icon-lishijilu{
+	font-weight: bold;
+	font-size: 2.9vh!important;
+}
+	</style>
+	<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_842202_dsx1034cwz4.css">
+</head>
+<body>
+	<div class="about-info">
+		<h3>about</h3>
+		<div>
+			<p>app_name: <span>lucklin_caculator</span></p>
+			<p>author: <span>lucklin</span></p>
+			<p>qq: <span>502763576</span></p>
+			<p>wechat: <span>zzl502763576</span></p>
+			<p>address: <span>CHENGDU CHINA</span></p>
+			<p>date: <span>2018/09/19</span></p>
+		</div>
+	</div>
+	<div class="history-info"></div>
+	<div class="wrapper">
+		<div class="hidebox"></div>
+		<div class="lcd-box">
+			<div class="icon-box">
+				<div class="about"><i class="iconfont icon-about"></i></div>
+				<div class="history"><i class="iconfont icon-lishijilu"></i></div>
+			</div>
+			<div class="input-box">
+				<div class="program"></div>
+				<div class="result"></div>
+			</div>
+		</div>
+		<div class="key-box">
+			<div class="key" id=""><span>%</span></div>
+			<div class="key" id="sqrt"><span>√</span></div>
+			<div class="key" id="pow"><span>x^</span></div>
+			<div class="key" id="include"><span>()</span></div>
+			<div class="key" id="clearenter"><span>CE</span></div>
+			<div class="key" id="clear"><span>C</span></div>
+			<div class="key" id="delete"><span>←</span></div>
+			<div class="key" id=""><span>/</span></div>
+			<div class="key key-num" id=""><span>7</span></div>
+			<div class="key key-num" id=""><span>8</span></div>
+			<div class="key key-num" id=""><span>9</span></div>
+			<div class="key" id=""><span>*</span></div>
+			<div class="key key-num" id=""><span>4</span></div>
+			<div class="key key-num" id=""><span>5</span></div>
+			<div class="key key-num" id=""><span>6</span></div>
+			<div class="key" id=""><span>-</span></div>
+			<div class="key key-num" id=""><span>1</span></div>
+			<div class="key key-num" id=""><span>2</span></div>
+			<div class="key key-num" id=""><span>3</span></div>
+			<div class="key" id=""><span>+</span></div>
+			<div class="key zero key-num" id=""><span>0</span></div>
+			<div class="key" id=""><span>.</span></div>
+			<div class="key" id="result"><span>=</span></div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		let eventstart = 'touchstart', eventend = 'touchend'
+		if(innerWidth >= 1400){
+			eventstart = 'mousedown';
+			eventend = 'mouseup';
+		}
+		document.getElementsByClassName("wrapper")[0].style.height = innerHeight + 'px';
+		let key = document.getElementsByClassName("key");
+		let program = document.getElementsByClassName("program")[0];
+		let result = document.getElementsByClassName("result")[0];
+		let symbol = '';
+		let number = '';
+		let isend = false;
+		let pow = {
+			tag: false,
+			val: "",
+			reload: ""
+		}
+		let historyELE = [];
+
+		for (let i = 0; i < key.length; i++) {
+			key[i].addEventListener(eventstart, function() {
+				this.classList.add('active');
+				keyfn(this)
+			})
+			key[i].addEventListener(eventend, function() {
+				this.classList.remove('active');
+			})
+		}
+
+		function keyfn(THIS) {
+			let input = '';
+			let innerText = THIS.getElementsByTagName("span")[0].innerText;
+
+			if(innerText * 1 >= 0 || innerText * 1 < 0) {
+				if(isend){
+					program.innerText = innerText;
+					isend = false;
+				}else{
+					program.innerText = program.innerText + innerText;
+					if(pow.tag){
+						pow.reload = Number(pow.reload + innerText);
+					}
+				}
+			}else{
+				if(THIS.id){
+					if(THIS.id == "clearenter"){
+						program.innerText = "";
+						pow.tag = false;
+						pow.val = "";
+						pow.reload = "";
+						if(result.innerText.length == 0) result.innerText = "0";
+						return;
+					}else if(THIS.id == "clear"){
+						program.innerText = "";
+						result.innerText = "";
+						return;
+					}
+					if(THIS.id == "include"){
+						if( patch("(", program.innerText) == patch(")", program.innerText) ){
+							program.innerText = program.innerText + "(";
+						}else{
+							program.innerText = program.innerText + ")";
+						}
+					}else if(THIS.id == "result"){
+						if( patch("(", program.innerText) != patch(")", program.innerText) ){
+							return;
+						}
+						result.innerText = evalfn(program.innerText)
+						if(pow.tag && typeof pow.reload == "number"){
+							result.innerText = Math.pow(Number(pow.val), Number(pow.reload))
+							pow.tag = false;
+							pow.val = "";
+							pow.reload = "";
+						}
+						historyELE.push({program: program.innerText, re: result.innerText})
+						isend = true;
+					}else if(THIS.id == "sqrt"){
+						if(pow.tag && typeof pow.reload == "number"){
+							result.innerText = Math.pow(Number(pow.val), Number(pow.reload))
+							pow.tag = false;
+							pow.val = "";
+							pow.reload = "";
+						}
+						if(isend || program.innerText.indexOf("^") > -1) program.innerText = result.innerText;
+						if( patch("(", program.innerText) != patch(")", program.innerText) ){
+							return;
+						}
+						result.innerText = Math.sqrt(evalfn(program.innerText))
+						program.innerText = "√" + evalfn(program.innerText);
+						isend = true;
+					}else if(THIS.id == "pow"){
+						if(program.innerText.indexOf("^") == -1){
+							if(program.innerText.indexOf("√") > -1) program.innerText = result.innerText;
+							pow.val = evalfn(program.innerText);
+							program.innerText = evalfn(program.innerText) + "^";
+						}else{
+							program.innerText = program.innerText.slice(0,-1) + "^";
+						}
+						pow.tag = true;
+						isend = false;
+					}else if(THIS.id == "delete"){
+						program.innerText = program.innerText.slice(0, -1);
+						if(program.innerText.indexOf("^") == -1){
+							pow.tag = false;
+							pow.val = "";
+							pow.reload = "";
+						}else{
+							let i = program.innerText.indexOf("^");
+							pow.reload = program.innerText.slice(i+1);
+						}
+						isend = false;
+					}
+					if(pow.tag && typeof pow.reload == "number"){
+						result.innerText = Math.pow(Number(pow.val), Number(pow.reload))
+						pow.tag = false;
+						pow.val = "";
+						pow.reload = "";
+					}
+				}else{
+					if(pow.tag && typeof pow.reload == "number"){
+						result.innerText = Math.pow(Number(pow.val), Number(pow.reload))
+						pow.tag = false;
+						pow.val = "";
+						pow.reload = "";
+					}
+					isend = false;
+					if(program.innerText.length == 0 && result.innerText.length > 0) program.innerText = result.innerText;
+					if(patch('.', program.innerText) > 0 && innerText == '.') return;
+					if(program.innerText.slice(-1) * 1 >= 0 || program.innerText.slice(-1) * 1 < 0){
+						if( patch("(", program.innerText) != patch(")", program.innerText) ){
+							program.innerText = program.innerText + innerText;
+							return;
+						}else{
+							if(program.innerText.indexOf("√") > -1 || program.innerText.indexOf("^") > -1) program.innerText = result.innerText;
+							program.innerText = program.innerText + innerText;
+							result.innerText = evalfn(program.innerText);
+						}
+						
+					}else if(program.innerText.slice(-1) == ")"){
+						program.innerText = result.innerText ? result.innerText : program.innerText;
+						program.innerText = program.innerText + innerText;
+					}else{
+						program.innerText = result.innerText ? result.innerText : program.innerText;
+						program.innerText = program.innerText.slice(0,-1) + innerText;
+					}
+				}
+				
+			}
+		}
+
+		function evalfn(str) {
+			if(Number(str) >= 0){
+				return Number(str);
+			}
+			return eval(str);
+		}
+
+		function patch(re,s){
+		  return s.split(re).length - 1;
+		}
+
+	</script>
+	<script type="text/javascript">
+		let history = document.getElementsByClassName("history")[0];
+		let historyinfo = document.getElementsByClassName("history-info")[0];
+		let about = document.getElementsByClassName("about")[0];
+		let aboutinfo = document.getElementsByClassName("about-info")[0];
+		history.addEventListener("click", function() {
+			document.getElementsByClassName("wrapper")[0].getElementsByClassName("hidebox")[0].style.display = "block";
+			historyinfo.style.display = "block";
+			historyinfo.style.overflow = "hidden";
+			let height = 0;
+			let timer = setInterval(() => {
+				height += 1;
+				if (height >= 50) {
+					height = 50;
+					clearInterval(timer);
+				}
+				historyinfo.style.overflow = "scroll";
+				historyinfo.style.height = height+"vh";
+			}, 10)
+			renderhistory()
+		})
+		about.addEventListener("click", function() {
+			document.getElementsByClassName("wrapper")[0].getElementsByClassName("hidebox")[0].style.display = "block";
+			aboutinfo.style.display = "block";
+		})
+		let hidebox = document.getElementsByClassName("hidebox")[0];
+		hidebox.addEventListener("click", function() {
+			document.getElementsByClassName("wrapper")[0].getElementsByClassName("hidebox")[0].style.display = "none";
+			historyinfo.style.display = "none";
+			historyinfo.style.height = "0px";
+		})
+		aboutinfo.addEventListener("click", function() {
+			document.getElementsByClassName("wrapper")[0].getElementsByClassName("hidebox")[0].style.display = "none";
+			aboutinfo.style.display = "none";
+		})
+
+		function renderhistory() {
+			let strdom = '';
+			historyELE.forEach((v) => {
+				strdom += `<div class='history-item'>
+								<div class="pro">${v.program}</div><div class="re">${v.re}</div>
+							</div>`
+			})
+			historyinfo.innerHTML = strdom;
+		}
+		onerror=()=>true;
+	</script>
+</body>
+</html>
